@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Notes</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+</head>
+<body>
+<nav class="navbar navbar-light bg-info">
+    <a href="index.html"><span class="navbar-brand mb-0 h1">eNotes</span></a>
+</nav>
+<div id="demo"></div>
+
+<script src="jquery-3.5.1.min.js"></script>
+<!--<script src="https://code.jquery.com/jquery-3.3.1.slim.js" crossorigin="anonymous"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.9/angular.min.js"></script>
+<script>
+    var data = "";
+    var xhr = new XMLHttpRequest();
+    xhr.addEventListener("readystatechange", function() {
+        if(this.readyState === 4) {
+            console.log(this.responseText);
+            var responseJson = JSON.parse(this.responseText);
+            console.log(responseJson);
+
+
+            for (x in responseJson){
+                var delLink = "https://dnote.herokuapp.com/api/notes/"+responseJson[x].id
+                var id = responseJson[x].id;
+                var htmlText = "<div class=\"card\" style=\"width: 58rem; margin-left: auto; margin-right: auto; margin-top: 2vh\" align=\"center\" id="+id+">\n" +
+                    "    <div class=\"card-body\">\n" +
+                    "        <h5 class=\"card-title\">"+responseJson[x].title+"</h5>\n" +"<hr>"+
+                    "        <p class=\"card-text\">"+responseJson[x].content+"</p>\n" +
+                    "      <a href=\"javascript:void(0);\" onclick=\"del(\'"+delLink+"\',\'"+id+"\')\" class=\"card-link\" id=\"link"+id+"\" style='color: red'>Delete</a>\n" +
+                    "<!--        <a href=\"#\" class=\"card-link\">Another link</a>-->\n" +
+                    "    </div>"
+                document.getElementById("demo").innerHTML += htmlText;
+            }
+        }
+    });
+    xhr.open("GET", "https://dnote.herokuapp.com/api/notes");
+    xhr.setRequestHeader("Access-Control-Allow-Origin",'*');
+    xhr.send(data);
+
+   function del(url, id){
+       var linkid = "link"+id;
+       document.getElementById(linkid).innerHTML="Deleting..."
+       $.ajax({
+           url: url,
+           type: 'DELETE',
+           success: function(result) {
+               document.getElementById(id).style.display = "none";
+           }
+       });
+   }
+
+
+</script>
+</body>
+</html>
