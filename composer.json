@@ -1,0 +1,15 @@
+{
+  "name": "vendor_name/notes",
+  "description": "description",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "divya",
+      "email": "email@example.com"
+    }
+  ],
+  "require": {
+    "monolog/monolog": "1.0.*"
+  }
+}
